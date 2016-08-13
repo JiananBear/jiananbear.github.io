@@ -84,7 +84,7 @@
 
 
 
-<meta name="description" content="Spark 自定义数据源的探索目的
+<meta name="description" content="目的
 
 目的是实现一个基于HDFS之上自定义的外部数据源.
 能够被spark加载转化成为DataFram，从而关联Spark SQL。
@@ -94,12 +94,12 @@
   我们自定义的数据源能像Spark内部实现的Text、Json数据源一样，可以通过以下两种方式被加载：
 
 通过DataFrameReader的方式
- 1">
+ 1sqlContext.read">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark 自定义数据源的探索">
 <meta property="og:url" content="http://yoursite.com/2016/08/13/Spark-自定义数据源的探索/index.html">
-<meta property="og:site_name" content="JiananBear's Note">
-<meta property="og:description" content="Spark 自定义数据源的探索目的
+<meta property="og:site_name" content="JiananBear's Notes">
+<meta property="og:description" content="目的
 
 目的是实现一个基于HDFS之上自定义的外部数据源.
 能够被spark加载转化成为DataFram，从而关联Spark SQL。
@@ -109,11 +109,11 @@
   我们自定义的数据源能像Spark内部实现的Text、Json数据源一样，可以通过以下两种方式被加载：
 
 通过DataFrameReader的方式
- 1">
-<meta property="og:updated_time" content="2016-08-13T03:05:51.000Z">
+ 1sqlContext.read">
+<meta property="og:updated_time" content="2016-08-13T03:53:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark 自定义数据源的探索">
-<meta name="twitter:description" content="Spark 自定义数据源的探索目的
+<meta name="twitter:description" content="目的
 
 目的是实现一个基于HDFS之上自定义的外部数据源.
 能够被spark加载转化成为DataFram，从而关联Spark SQL。
@@ -123,7 +123,7 @@
   我们自定义的数据源能像Spark内部实现的Text、Json数据源一样，可以通过以下两种方式被加载：
 
 通过DataFrameReader的方式
- 1">
+ 1sqlContext.read">
 
 
 
@@ -146,7 +146,7 @@
 
   <link rel="canonical" href="http://yoursite.com/2016/08/13/Spark-自定义数据源的探索/"/>
 
-  <title> Spark 自定义数据源的探索 | JiananBear's Note </title>
+  <title> Spark 自定义数据源的探索 | JiananBear's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -177,7 +177,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">JiananBear's Note</span>
+      <span class="site-title">JiananBear's Notes</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -205,16 +205,6 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
           </a>
         </li>
       
@@ -250,9 +240,32 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
   
 </nav>
 
@@ -307,6 +320,13 @@
 
           
             
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/13/Spark-自定义数据源的探索/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/13/Spark-自定义数据源的探索/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -326,7 +346,7 @@
       
 
       
-        <h1 id="Spark-自定义数据源的探索"><a href="#Spark-自定义数据源的探索" class="headerlink" title="Spark 自定义数据源的探索"></a>Spark 自定义数据源的探索</h1><h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><blockquote>
+        <h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><blockquote>
 <ol>
 <li>目的是实现一个基于HDFS之上自定义的外部数据源.</li>
 <li>能够被spark加载转化成为DataFram，从而关联Spark SQL。</li>
@@ -346,13 +366,13 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">HadoopRDD</span>[<span class="type">K</span>, <span class="type">V</span>](<span class="params"></span></span></div><div class="line">    sc: <span class="type">SparkContext</span>,</div><div class="line">    broadcastedConf: <span class="type">Broadcast</span>[<span class="type">SerializableConfiguration</span>],</div><div class="line">    initLocalJobConfFuncOpt: <span class="type">Option</span>[<span class="type">JobConf</span> =&gt; <span class="type">Unit</span>],</div><div class="line">    inputFormatClass: <span class="type">Class</span>[_ &lt;: <span class="type">InputFormat</span>[<span class="type">K</span>, <span class="type">V</span>]],</div><div class="line">    keyClass: <span class="type">Class</span>[<span class="type">K</span>],</div><div class="line">    valueClass: <span class="type">Class</span>[<span class="type">V</span>],</div><div class="line">    minPartitions: <span class="type">Int</span>)</div><div class="line">  <span class="keyword">extends</span> <span class="type">RDD</span>[(<span class="type">K</span>, <span class="type">V</span>)](sc, <span class="type">Nil</span>)</div></pre></td></tr></table></figure>
 <p>从HadoopRDD的构造函数中，我们可以发现数据加载策略依赖于Hadoop的inputFormat，因此想要加载自定义的数据存储格式，就需要定制化一个InputFormat。<br>关于InputFormat包含两个关键方法</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public interface <span class="type">InputFormat</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt; &#123;</div><div class="line"></div><div class="line">  <span class="type">InputSplit</span>[] getSplits(<span class="type">JobConf</span> job, int numSplits) <span class="keyword">throws</span> <span class="type">IOException</span>;</div><div class="line"></div><div class="line">  <span class="type">RecordReader</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt; getRecordReader(<span class="type">InputSplit</span> split,</div><div class="line">                                     <span class="type">JobConf</span> job, </div><div class="line">                                     <span class="type">Reporter</span> reporter) <span class="keyword">throws</span> <span class="type">IOException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="getSplits函数"><a href="#getSplits函数" class="headerlink" title="getSplits函数"></a>getSplits函数</h4><p>用于分割inputFile成多个Split，Split的数量在Hadoop控制中控制着加载数据的Mapper的数量，在Spark中也同样影响加载数据的Task的数量。</p>
+<h3 id="getSplits函数"><a href="#getSplits函数" class="headerlink" title="getSplits函数"></a>getSplits函数</h3><p>用于分割inputFile成多个Split，Split的数量在Hadoop控制中控制着加载数据的Mapper的数量，在Spark中也同样影响加载数据的Task的数量。</p>
 <p>Spilt定义数据分片的相关信息，我觉得Split包含两个大的功能：</p>
 <ol>
 <li>Split包含了该分片数据Location相关的信息，换句话说就是Split数据在集群中的那些节点上，这个信息有助于Spark将加载数据的任务下发到Split数据所在的节点上。</li>
 <li>Split还包含了<code>getLength</code>方法，主要就是获取Split的数据长度。在Executer处理的时候知道什么时候结束加载任务。</li>
 </ol>
-<h4 id="getRecordReader函数"><a href="#getRecordReader函数" class="headerlink" title="getRecordReader函数"></a>getRecordReader函数</h4><p>这个函数返回一个RecordReader，这个RecordReader类顾名思义，就是确定如何加载文件中的Record。<br>RecordReader 中最为关键的就是next方法，在这个方法中，我们定义逐个加载Record的策略，每个Record必须是key-value的形式。<br><code>next</code>函数返回<code>true</code>，那么这个Record有效并且会继续加载数据解析下一个Record，如果返回<code>false</code>表示这个split中的数据加载完毕，这个分片中的数据将不再被解析。</p>
+<h3 id="getRecordReader函数"><a href="#getRecordReader函数" class="headerlink" title="getRecordReader函数"></a>getRecordReader函数</h3><p>这个函数返回一个RecordReader，这个RecordReader类顾名思义，就是确定如何加载文件中的Record。<br>RecordReader 中最为关键的就是next方法，在这个方法中，我们定义逐个加载Record的策略，每个Record必须是key-value的形式。<br><code>next</code>函数返回<code>true</code>，那么这个Record有效并且会继续加载数据解析下一个Record，如果返回<code>false</code>表示这个split中的数据加载完毕，这个分片中的数据将不再被解析。</p>
 <p>Hadoop根据不同的需求提供了不同类型的Split、RecordReader、IntputFormat，可以根据不同需求选取对应的类来实现自定义加载数据的需求。</p>
 <h2 id="Extral-DataSource-的实现"><a href="#Extral-DataSource-的实现" class="headerlink" title="Extral DataSource 的实现"></a>Extral DataSource 的实现</h2><p>接下来就是让Spark SQL支持我们自定义的数据源。在Spark中是通过Relation来定义数据的schema以及扫描数据的方式。</p>
 <p>实现一个Relation 需要具备三个条件</p>
@@ -372,7 +392,7 @@
 <li>CatalystScan：Catalyst的支持传入expressions来进行Scan。支持列裁剪和Filter。</li>
 </ol>
 <p>equality function主要的作用确定什么时候替换cached result的</p>
-<h5 id="简单的例子"><a href="#简单的例子" class="headerlink" title="简单的例子"></a>简单的例子</h5><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TextRelation</span>(<span class="params">parameters: <span class="type">Map</span>[<span class="type">String</span>, <span class="type">String</span>] = <span class="type">Map</span>.empty[<span class="type">String</span>, <span class="type">String</span>]</span>)</span></div><div class="line">                  (<span class="meta">@transient</span> <span class="keyword">val</span> sqlContext: <span class="type">SQLContext</span>) <span class="keyword">extends</span> <span class="type">BaseRelation</span> <span class="keyword">with</span> <span class="type">TableScan</span> &#123;</div><div class="line"></div><div class="line">  <span class="keyword">val</span> path = parameters.getOrElse(<span class="string">"path"</span>, sys.error(<span class="string">"not valid schema"</span>)) <span class="comment">// parameters是个Map，传入什么可以自己定义</span></div><div class="line">  </div><div class="line">  <span class="keyword">override</span> <span class="keyword">val</span> schema: <span class="type">StructType</span> = &#123;</div><div class="line">  	<span class="comment">// 定义schema，方式有很多</span></div><div class="line">  	<span class="comment">// 可以从数据库中取</span></div><div class="line">  	<span class="comment">// 可以从文件中读</span></div><div class="line">  	<span class="comment">// 等等</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">buildScan</span></span>(): <span class="type">RDD</span>[<span class="type">Row</span>] = &#123;</div><div class="line"> 	<span class="comment">// 可以根据parameters中的参数定制加载数据的策略</span></div><div class="line"> 	<span class="comment">// 如果加载hdfs上的数据，主要就是通过HadoopRDD从HDFS上将数据加载进来，然后转为RDD[Row]的形式。</span></div><div class="line"> 	<span class="comment">// 还可以加载其他数据库的数据，只要转后转化为RDD[Row]的形式就可以了</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// 实现equal函数</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="简单的例子"><a href="#简单的例子" class="headerlink" title="简单的例子"></a>简单的例子</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TextRelation</span>(<span class="params">parameters: <span class="type">Map</span>[<span class="type">String</span>, <span class="type">String</span>] = <span class="type">Map</span>.empty[<span class="type">String</span>, <span class="type">String</span>]</span>)</span></div><div class="line">                  (<span class="meta">@transient</span> <span class="keyword">val</span> sqlContext: <span class="type">SQLContext</span>) <span class="keyword">extends</span> <span class="type">BaseRelation</span> <span class="keyword">with</span> <span class="type">TableScan</span> &#123;</div><div class="line"></div><div class="line">  <span class="keyword">val</span> path = parameters.getOrElse(<span class="string">"path"</span>, sys.error(<span class="string">"not valid schema"</span>)) <span class="comment">// parameters是个Map，传入什么可以自己定义</span></div><div class="line">  </div><div class="line">  <span class="keyword">override</span> <span class="keyword">val</span> schema: <span class="type">StructType</span> = &#123;</div><div class="line">  	<span class="comment">// 定义schema，方式有很多</span></div><div class="line">  	<span class="comment">// 可以从数据库中取</span></div><div class="line">  	<span class="comment">// 可以从文件中读</span></div><div class="line">  	<span class="comment">// 等等</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">buildScan</span></span>(): <span class="type">RDD</span>[<span class="type">Row</span>] = &#123;</div><div class="line"> 	<span class="comment">// 可以根据parameters中的参数定制加载数据的策略</span></div><div class="line"> 	<span class="comment">// 如果加载hdfs上的数据，主要就是通过HadoopRDD从HDFS上将数据加载进来，然后转为RDD[Row]的形式。</span></div><div class="line"> 	<span class="comment">// 还可以加载其他数据库的数据，只要转后转化为RDD[Row]的形式就可以了</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// 实现equal函数</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>有了一个简单Relation，还需要提供一个Provider。<br>在每次调用执行DDL语句的时候，Provider实例会被创建，用于构建我们定义的Relation，这样才能支持开篇目标中提到的sql创建的方式</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">trait</span> <span class="title">RelationProvider</span> </span>&#123;</div><div class="line">  <span class="comment">/**</span></div><div class="line">   * Returns a new base relation with the given parameters.</div><div class="line">   */</div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createRelation</span></span>(sqlContext: <span class="type">SQLContext</span>, parameters: <span class="type">Map</span>[<span class="type">String</span>, <span class="type">String</span>]): <span class="type">BaseRelation</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="关于数据的写入"><a href="#关于数据的写入" class="headerlink" title="关于数据的写入"></a>关于数据的写入</h2><p>目前获取的思路就是将<code>RDD[Row]</code>转化为<code>RDD[(k,v)]</code>的形式，然后调用<code>SaveAsHadoopFile</code></p>
@@ -449,6 +469,10 @@
           
   <div class="comments" id="comments">
     
+      <div class="ds-thread" data-thread-key="2016/08/13/Spark-自定义数据源的探索/"
+           data-title="Spark 自定义数据源的探索" data-url="http://yoursite.com/2016/08/13/Spark-自定义数据源的探索/">
+      </div>
+    
   </div>
 
 
@@ -483,7 +507,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/source/images/avatar.PNG"
+               src="/images/avatar.PNG"
                alt="Jianan Xiong" />
           <p class="site-author-name" itemprop="name">Jianan Xiong</p>
           <p class="site-description motion-element" itemprop="description"></p>
@@ -530,7 +554,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-自定义数据源的探索"><span class="nav-number">1.</span> <span class="nav-text">Spark 自定义数据源的探索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义HDFS上的数据存储格式"><span class="nav-number">1.2.</span> <span class="nav-text">自定义HDFS上的数据存储格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#getSplits函数"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">getSplits函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getRecordReader函数"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">getRecordReader函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Extral-DataSource-的实现"><span class="nav-number">1.3.</span> <span class="nav-text">Extral DataSource 的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#简单的例子"><span class="nav-number">1.3.0.0.1.</span> <span class="nav-text">简单的例子</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于数据的写入"><span class="nav-number">1.4.</span> <span class="nav-text">关于数据的写入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义数据源的改进"><span class="nav-number">1.5.</span> <span class="nav-text">自定义数据源的改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.6.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.7.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义HDFS上的数据存储格式"><span class="nav-number">2.</span> <span class="nav-text">自定义HDFS上的数据存储格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#getSplits函数"><span class="nav-number">2.1.</span> <span class="nav-text">getSplits函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getRecordReader函数"><span class="nav-number">2.2.</span> <span class="nav-text">getRecordReader函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Extral-DataSource-的实现"><span class="nav-number">3.</span> <span class="nav-text">Extral DataSource 的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单的例子"><span class="nav-number">3.1.</span> <span class="nav-text">简单的例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于数据的写入"><span class="nav-number">4.</span> <span class="nav-text">关于数据的写入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义数据源的改进"><span class="nav-number">5.</span> <span class="nav-text">自定义数据源的改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">6.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
           </div>
         </section>
@@ -651,15 +675,165 @@
 
   
 
+  
+    
+  
 
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"luckybear"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
 
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+
+
   
   
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
 
   
 
