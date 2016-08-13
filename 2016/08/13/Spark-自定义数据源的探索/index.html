@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Spark," />
 
 
 
@@ -84,12 +84,46 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="JiananBear's Note">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="Spark 自定义数据源的探索目的
+
+目的是实现一个基于HDFS之上自定义的外部数据源.
+能够被spark加载转化成为DataFram，从而关联Spark SQL。
+我们可以将DataFrame转化成自定义的数据格式，写入到HDFS文件中。
+
+
+  我们自定义的数据源能像Spark内部实现的Text、Json数据源一样，可以通过以下两种方式被加载：
+
+通过DataFrameReader的方式
+ 1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark 自定义数据源的探索">
+<meta property="og:url" content="http://yoursite.com/2016/08/13/Spark-自定义数据源的探索/index.html">
 <meta property="og:site_name" content="JiananBear's Note">
+<meta property="og:description" content="Spark 自定义数据源的探索目的
+
+目的是实现一个基于HDFS之上自定义的外部数据源.
+能够被spark加载转化成为DataFram，从而关联Spark SQL。
+我们可以将DataFrame转化成自定义的数据格式，写入到HDFS文件中。
+
+
+  我们自定义的数据源能像Spark内部实现的Text、Json数据源一样，可以通过以下两种方式被加载：
+
+通过DataFrameReader的方式
+ 1">
+<meta property="og:updated_time" content="2016-08-13T03:05:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JiananBear's Note">
+<meta name="twitter:title" content="Spark 自定义数据源的探索">
+<meta name="twitter:description" content="Spark 自定义数据源的探索目的
+
+目的是实现一个基于HDFS之上自定义的外部数据源.
+能够被spark加载转化成为DataFram，从而关联Spark SQL。
+我们可以将DataFrame转化成自定义的数据格式，写入到HDFS文件中。
+
+
+  我们自定义的数据源能像Spark内部实现的Text、Json数据源一样，可以通过以下两种方式被加载：
+
+通过DataFrameReader的方式
+ 1">
 
 
 
@@ -110,9 +144,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/08/13/Spark-自定义数据源的探索/"/>
 
-  <title> JiananBear's Note </title>
+  <title> Spark 自定义数据源的探索 | JiananBear's Note </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -133,9 +167,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -232,9 +264,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -254,10 +286,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/08/13/Spark-自定义数据源的探索/" itemprop="url">
-                  Spark 自定义数据源的探索
-                </a>
+                Spark 自定义数据源的探索
               
             
           </h1>
@@ -297,9 +326,7 @@
       
 
       
-        
-          
-            <h1 id="Spark-自定义数据源的探索"><a href="#Spark-自定义数据源的探索" class="headerlink" title="Spark 自定义数据源的探索"></a>Spark 自定义数据源的探索</h1><h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><blockquote>
+        <h1 id="Spark-自定义数据源的探索"><a href="#Spark-自定义数据源的探索" class="headerlink" title="Spark 自定义数据源的探索"></a>Spark 自定义数据源的探索</h1><h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><blockquote>
 <ol>
 <li>目的是实现一个基于HDFS之上自定义的外部数据源.</li>
 <li>能够被spark加载转化成为DataFram，从而关联Spark SQL。</li>
@@ -374,36 +401,45 @@
 <li><a href="https://github.com/JiananBear/Extra-DataSource-Demo/tree/master" target="_blank" rel="external">我自己写了一个小demo</a></li>
 </ol>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag">#Spark</a>
+          
+        </div>
       
 
       
+
       
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -411,6 +447,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -430,8 +470,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/source/images/avatar.PNG"
@@ -474,6 +523,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-自定义数据源的探索"><span class="nav-number">1.</span> <span class="nav-text">Spark 自定义数据源的探索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义HDFS上的数据存储格式"><span class="nav-number">1.2.</span> <span class="nav-text">自定义HDFS上的数据存储格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#getSplits函数"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">getSplits函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getRecordReader函数"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">getRecordReader函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Extral-DataSource-的实现"><span class="nav-number">1.3.</span> <span class="nav-text">Extral DataSource 的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#简单的例子"><span class="nav-number">1.3.0.0.1.</span> <span class="nav-text">简单的例子</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于数据的写入"><span class="nav-number">1.4.</span> <span class="nav-text">关于数据的写入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义数据源的改进"><span class="nav-number">1.5.</span> <span class="nav-text">自定义数据源的改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.6.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.7.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -577,6 +637,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
